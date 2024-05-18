@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "234653074434",
+    "project_id": "authpic-e7b0e",
+    "storage_bucket": "authpic-e7b0e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:234653074434:android:06c25a54bde2ddaa60531b",
+        "android_client_info": {
+          "package_name": "com.authpic"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA36sE4UL2rd1gz_gJgvEF4URouk2GzAoo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
