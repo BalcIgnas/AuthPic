@@ -17,6 +17,7 @@ import DirectionRow from '../../components/DirectionRow';
 import PictureRow from '../../components/PictureRow';
 import firestore from '@react-native-firebase/firestore';
 import {useUser} from '../../components/contexts/UserContext';
+import {useAuthentication} from '../../components/contexts/AuthenticationContext';
 
 function Registration() {
   const navigation =
@@ -29,6 +30,7 @@ function Registration() {
   const [dirTwo, setDirTwo] = useState<Direction | null>(null);
 
   const {user} = useUser();
+  const {setAuthenticated} = useAuthentication();
 
   const handleSelectPictureOne = (selectedPicture: Picture) => {
     if (picOne == null) {
@@ -95,6 +97,7 @@ function Registration() {
           authentication: newAuthDoc.id,
         });
         console.log('Data sent successfully');
+        setAuthenticated(false);
         Alert.alert(
           'Registracija baigta',
           'Sėkmingai užsiregistravote. Galite grįžti į pradinį langą.',

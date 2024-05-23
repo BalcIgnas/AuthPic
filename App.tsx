@@ -22,6 +22,8 @@ import {ImageProvider} from './android/components/contexts/ImageContext';
 import Login from './android/app/screens/Login';
 import {GirdItemsProvider} from './android/components/contexts/GridItemsContext';
 import {UserProvider} from './android/components/contexts/UserContext';
+import {AuthenticationProvider} from './android/components/contexts/AuthenticationContext';
+import {BlockProvider} from './android/components/contexts/BlockContext';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -58,9 +60,13 @@ function App(): React.JSX.Element {
     <UserProvider>
       <ImageProvider>
         <GirdItemsProvider>
-          <NavigationContainer>
-            <RootStack />
-          </NavigationContainer>
+          <AuthenticationProvider>
+            <BlockProvider>
+              <NavigationContainer>
+                <RootStack />
+              </NavigationContainer>
+            </BlockProvider>
+          </AuthenticationProvider>
         </GirdItemsProvider>
       </ImageProvider>
     </UserProvider>
