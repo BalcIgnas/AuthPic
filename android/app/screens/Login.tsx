@@ -15,6 +15,9 @@ import {useGridItems} from '../../components/contexts/GridItemsContext';
 import firestore from '@react-native-firebase/firestore';
 import {getCorrectPicture} from '../functions/navigationHelpers';
 import {useUser} from '../../components/contexts/UserContext';
+import {useAuthentication} from '../../components/contexts/AuthenticationContext';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useBlock} from '../../components/contexts/BlockContext';
 
 interface Auth {
   dirOne: Direction;
@@ -29,8 +32,30 @@ function Login() {
 
   const [correctPicture, setCorrectPicture] = useState<Coord | null>(null);
   const [page, setPage] = useState<number>(1);
+  const [incorrectGuesses, setIncorrectGuesses] = useState<number>(0);
   const {gridItems} = useGridItems();
   const {user} = useUser();
+  const {setAuthenticated} = useAuthentication();
+  const {setBlocked} = useBlock();
+
+  useEffect(() => {
+    const checkBlockStatus = async () => {
+      const blockTime = await AsyncStorage.getItem('blockTime');
+      if (blockTime) {
+        const currentTime = new Date().getTime();
+        if (currentTime < parseInt(blockTime)) {
+          setBlocked(true);
+          setTimeout(() => {
+            setBlocked(false);
+            AsyncStorage.removeItem('blockTime');
+          }, parseInt(blockTime) - currentTime);
+        } else {
+          AsyncStorage.removeItem('blockTime');
+        }
+      }
+    };
+    checkBlockStatus();
+  }, []);
 
   async function getAuth() {
     if (user.authentication) {
@@ -77,7 +102,7 @@ function Login() {
     return null;
   };
 
-  function handleSelectPicture(selectedPicture: Picture): void {
+  async function handleSelectPicture(selectedPicture: Picture): Promise<void> {
     if (
       correctPicture &&
       selectedPicture.coord.row === correctPicture.row &&
@@ -87,15 +112,39 @@ function Login() {
         setPage(2);
       } else {
         Alert.alert('Sėkmingai prisijungta', 'Autentifikacija sėkminga', [
-          {text: 'Tęsti', onPress: () => navigation.navigate('Home')},
+          {
+            text: 'Tęsti',
+            onPress: () => {
+              setAuthenticated(true);
+              navigation.popToTop();
+            },
+          },
         ]);
       }
     } else {
-      Alert.alert(
-        'Pasirinkta neteisingai',
-        'Pasirinkote neteisingą figūrą, bandykite dar kartą.',
-        [{text: 'Užverti', onPress: () => setPage(page === 1 ? 0 : 1)}],
-      );
+      const guesses = incorrectGuesses + 1;
+      setIncorrectGuesses(guesses);
+      if (incorrectGuesses == 5) {
+        const blockDuration = 5 * 60 * 1000;
+        const blockTime = new Date().getTime() + blockDuration;
+        await AsyncStorage.setItem('blockTime', blockTime.toString());
+        setBlocked(true);
+        setTimeout(() => {
+          setBlocked(false);
+          AsyncStorage.removeItem('blockTime');
+        }, blockDuration);
+        Alert.alert(
+          'Bandymų limitas pasiektas',
+          'Bandykite vėl po 5 minučių.',
+          [{text: 'Užverti', onPress: () => navigation.popToTop()}],
+        );
+      } else {
+        Alert.alert(
+          'Pasirinkta neteisingai',
+          'Pasirinkote neteisingą figūrą, bandykite dar kartą.',
+          [{text: 'Užverti', onPress: () => setPage(page === 1 ? 0 : 1)}],
+        );
+      }
     }
   }
 
