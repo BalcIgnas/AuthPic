@@ -97,6 +97,12 @@ function Registration() {
           authentication: newAuthDoc.id,
         });
         console.log('Data sent successfully');
+        if (user.authentication) {
+          await firestore()
+            .collection('authentication')
+            .doc(user.authentication)
+            .delete();
+        }
         setAuthenticated(false);
         Alert.alert(
           'Registracija baigta',

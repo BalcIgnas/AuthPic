@@ -10,8 +10,7 @@ import {
 import GlobalStyles from '../config/GlobalStyles';
 import {ImageContext} from './contexts/ImageContext';
 import {useGridItems} from './contexts/GridItemsContext';
-import firestore from '@react-native-firebase/firestore';
-import storage from '@react-native-firebase/storage';
+import {LessonImageContext} from './contexts/LessonImageContext';
 
 interface PictureGridProps {
   lesson: boolean;
@@ -41,22 +40,7 @@ const shuffleArray = (array: PictureItem[]): PictureItem[] => {
   return array;
 };
 
-async function getDownloadURL(path: string) {
-  const url = await storage().refFromURL(path).getDownloadURL();
-  return url;
-}
-
-async function getLessonPictures() {
-  const snapshot = await firestore().collection('lesssonPictures').get();
-  const picturesPromises = snapshot.docs.map(async doc => {
-    const url = await getDownloadURL(doc.data().path);
-    return {
-      id: doc.id,
-      path: url,
-    };
-  });
-  const pictures = await Promise.all(picturesPromises);
-
+function sortPictures(pictures: PictureItem[]) {
   const picture25 = pictures.find(picture => picture.id === 'picture25');
   const otherPictures = pictures.filter(picture => picture.id !== 'picture25');
 
@@ -79,27 +63,22 @@ const PictureGrid: React.FC<PictureGridProps> = ({
 }) => {
   const {gridItems, setGridItems} = useGridItems();
   const {getAllImages} = useContext(ImageContext);
+  const {getAllLessonImages} = useContext(LessonImageContext);
 
   async function generateGridItems() {
     try {
-      if (lesson) {
-        const pics = await getLessonPictures();
-        console.log(pics);
-        return pics.map((picture, index) => ({
-          id: picture.id,
-          path: picture.path,
-          row: Math.floor(index / 5) + 1,
-          col: (index % 5) + 1,
-        }));
-      }
-      const pictureData = getAllImages();
+      const pictureData = lesson ? getAllLessonImages() : getAllImages();
       if (pictureData != null) {
         const pictureArray: PictureItem[] = Object.entries(pictureData).map(
           ([id, path]) => ({id, path}),
         );
 
         if (pictureArray.length) {
-          const items = shuffle ? shuffleArray(pictureArray) : pictureArray;
+          const items = lesson
+            ? sortPictures(pictureArray)
+            : shuffle
+            ? shuffleArray(pictureArray)
+            : pictureArray;
           const gridItems = items.map((picture, index) => ({
             id: picture.id,
             path: picture.path,
@@ -136,8 +115,6 @@ const PictureGrid: React.FC<PictureGridProps> = ({
       key={item.id}
       style={styles.gridItem}
       onPress={() => selectPicture(item.id, item.row, item.col)}>
-      {/* {isLesson && <Image source={item.path} />}
-      {!isLesson && <Image source={{uri: item.path, width: 55, height: 55}} />} */}
       <Image source={{uri: item.path, width: 55, height: 55}} />
     </TouchableOpacity>
   ));

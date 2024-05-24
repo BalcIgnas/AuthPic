@@ -14,6 +14,7 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import GlobalStyles from '../../../config/GlobalStyles';
 import Direction from '../../../components/Direction';
 import Picture from '../../../components/Picture';
+import LessonPicture from '../../../components/LessonPicture';
 
 function LessonThree() {
   const navigation =
@@ -26,8 +27,8 @@ function LessonThree() {
     tableData: [
       [
         'Paveikslėliai:',
-        <Picture id={'t6PczjnZ1FTJy1fAfZTi'} />,
-        <Picture id={'YWeXhA4TIFHNA6NE6jXC'} />,
+        <LessonPicture id={'picture5'} />,
+        <LessonPicture id={'picture13'} />,
       ],
       [
         'Kryptys:',
