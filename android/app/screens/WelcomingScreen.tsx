@@ -40,7 +40,6 @@ function WelcomingScreen() {
   }
 
   async function isAccountRegistered() {
-    console.log('AccountRegistered triggered');
     const uniqueId = await DeviceInfo.getUniqueId();
     try {
       const userSnapshot = await firestore()
