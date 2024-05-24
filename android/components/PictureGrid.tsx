@@ -1,5 +1,11 @@
 import React, {useContext, useEffect} from 'react';
-import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
+import {
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+  Dimensions,
+} from 'react-native';
 import {
   Table,
   TableWrapper,
@@ -110,12 +116,17 @@ const PictureGrid: React.FC<PictureGridProps> = ({
     }
   };
 
+  const windowWidth = Dimensions.get('window').width;
+  const itemSize = windowWidth / 6;
+
   const temp = gridItems.map(item => (
     <TouchableOpacity
       key={item.id}
-      style={styles.gridItem}
+      style={[styles.gridItem]}
       onPress={() => selectPicture(item.id, item.row, item.col)}>
-      <Image source={{uri: item.path, width: 55, height: 55}} />
+      <Image
+        source={{uri: item.path, width: itemSize * 0.9, height: itemSize * 0.9}}
+      />
     </TouchableOpacity>
   ));
 
@@ -149,16 +160,7 @@ const PictureGrid: React.FC<PictureGridProps> = ({
 };
 
 const styles = StyleSheet.create({
-  grid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'center',
-    marginTop: 70,
-    marginBottom: 20,
-  },
   gridItem: {
-    width: 55,
-    height: 55,
     justifyContent: 'center',
     alignItems: 'center',
     margin: 2,
