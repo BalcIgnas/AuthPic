@@ -124,7 +124,7 @@ function Login() {
     } else {
       const guesses = incorrectGuesses + 1;
       setIncorrectGuesses(guesses);
-      if (incorrectGuesses == 5) {
+      if (guesses == 5) {
         const blockDuration = 5 * 60 * 1000;
         const blockTime = new Date().getTime() + blockDuration;
         await AsyncStorage.setItem('blockTime', blockTime.toString());

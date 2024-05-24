@@ -11,7 +11,7 @@ import {
 import {Rows, Table, TableWrapper} from 'react-native-table-component';
 import GlobalStyles from '../../../config/GlobalStyles';
 import Direction from '../../../components/Direction';
-import Picture from '../../../components/Picture';
+import LessonPicture from '../../../components/LessonPicture';
 
 function TestOne() {
   const navigation =
@@ -19,8 +19,8 @@ function TestOne() {
 
   const table = {
     tableData: [
-      ['Pirmas paveikslėlis:', <Picture id={'nUcOeO2HMwHsYtXhUkAb'} />],
-      ['Antras paveikslėlis:', <Picture id={'yQ2CgXRUcHDAIeE5eHUg'} />],
+      ['Pirmas paveikslėlis:', <LessonPicture id={'picture10'} />],
+      ['Antras paveikslėlis:', <LessonPicture id={'picture3'} />],
       ['Pirma kryptis:', <Direction direction={'down'} />],
       ['Antra kryptis:', <Direction direction={'right'} />],
     ],

@@ -2,7 +2,6 @@ import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import React from 'react';
 import {
-  Image,
   SafeAreaView,
   StyleSheet,
   Text,
@@ -12,7 +11,7 @@ import {
 import {Rows, Table, TableWrapper} from 'react-native-table-component';
 import GlobalStyles from '../../../config/GlobalStyles';
 import Direction from '../../../components/Direction';
-import Picture from '../../../components/Picture';
+import LessonPicture from '../../../components/LessonPicture';
 
 function TestThree() {
   const navigation =
@@ -20,8 +19,8 @@ function TestThree() {
 
   const table = {
     tableData: [
-      ['Pirmas paveikslėlis:', <Picture id={'yQ2CgXRUcHDAIeE5eHUg'} />],
-      ['Antras paveikslėlis:', <Picture id={'5st4gkbrDt9hKNXK2xKG'} />],
+      ['Pirmas paveikslėlis:', <LessonPicture id={'picture3'} />],
+      ['Antras paveikslėlis:', <LessonPicture id={'picture16'} />],
       ['Pirma kryptis:', <Direction direction={'down'} />],
       ['Antra kryptis:', <Direction direction={'down'} />],
     ],
