@@ -65,7 +65,6 @@ function Login() {
           .doc(user.authentication)
           .get();
         const data = snapshot.data();
-        console.log(data);
         if (data) {
           const auth: Auth = {
             picOne: data.picOne,
